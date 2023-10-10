@@ -26,7 +26,7 @@ To use this script, follow these steps:
 1. Clone this repository to your server:
 
    ```bash
-   https://github.com/Lalatenduswain/SSH-N-Fail2Ban.git
+   git clone https://github.com/Lalatenduswain/SSH-N-Fail2Ban.git
    ```
 
 2. Navigate to the repository directory:
