@@ -62,5 +62,3 @@ This script is provided as-is and may require modifications or updates based on 
 
 Feel free to modify the README as needed to provide additional context, usage instructions, or any other relevant information.
 ```
-
-Replace `YourUsername/YourRepository` with your actual GitHub username and repository name. You can also modify the introduction, usage instructions, and other sections as needed to provide more context for your specific use case.
