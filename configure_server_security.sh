@@ -36,7 +36,9 @@ EOL
         sudo systemctl restart fail2ban
         echo "Fail2ban has been restarted with the custom SSH port configuration."
     else
-        echo "Fail2ban is not running. Please start it manually."
+        # Fail2ban is not running, start it
+        sudo systemctl start fail2ban
+        echo "Fail2ban is not running. Starting Fail2ban with the custom SSH port configuration."
     fi
 
     echo "Fail2ban is now configured to monitor SSH on port $CUSTOM_SSH_PORT."
@@ -70,31 +72,41 @@ EOF
     # Allow the new SSH port in UFW
     ufw allow $NEW_SSH_PORT/tcp
 
+    # Allow ports 80 and 443 in UFW
+    ufw allow 80/tcp
+    ufw allow 443/tcp
+
     # Enable UFW if not already enabled
     if ! ufw status | grep -q "Status: active"; then
         ufw enable
     fi
 
-    # Display UFW status and added rule
-    ufw status
-    echo "SSH port has been changed to $NEW_SSH_PORT, and the port is allowed through the UFW firewall."
+    # Display UFW status and added rules
+    echo "UFW Status:"
+    ufw status verbose
+    echo "SSH port has been changed to $NEW_SSH_PORT, and ports 80 and 443 are allowed through the UFW firewall."
 }
+
+# Automatically accept "yes" for all input questions
+YES="yes"
 
 # Check if Fail2ban is installed
 if ! command -v fail2ban-client &>/dev/null; then
-    echo "Fail2ban is not installed. Do you want to install it? (yes/no)"
-    read -r INSTALL_FAIL2BAN
-    if [[ "$INSTALL_FAIL2BAN" == "yes" ]]; then
-        sudo apt update
-        sudo apt install fail2ban
-        configure_fail2ban_custom_ssh
-    else
-        echo "Fail2ban is not installed. Exiting."
-        exit 1
-    fi
+    echo "Fail2ban is not installed. Installing Fail2ban..."
+    yes "$YES" | sudo apt update
+    yes "$YES" | sudo apt install fail2ban
+    configure_fail2ban_custom_ssh
 else
     configure_fail2ban_custom_ssh
 fi
 
-# Configure SSH port and UFW
+# Configure SSH port, UFW, and display status
 configure_ssh_port_and_ufw
+
+# Display SSH port
+echo "SSH Port:"
+echo $NEW_SSH_PORT
+
+# Display Fail2ban service status
+echo "Fail2ban Status:"
+systemctl status fail2ban
