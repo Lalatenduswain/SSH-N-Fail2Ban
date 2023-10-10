@@ -32,7 +32,7 @@ To use this script, follow these steps:
 2. Navigate to the repository directory:
 
    ```bash
-   cd YourRepository
+   cd SSH-N-Fail2Ban
    ```
 
 3. Make the script executable:
