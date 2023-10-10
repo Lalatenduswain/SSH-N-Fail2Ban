@@ -82,18 +82,15 @@ EOF
     echo "SSH port has been changed to $NEW_SSH_PORT, and the port is allowed through the UFW firewall."
 }
 
+# Automatically accept "yes" for all input questions
+YES="yes"
+
 # Check if Fail2ban is installed
 if ! command -v fail2ban-client &>/dev/null; then
-    echo "Fail2ban is not installed. Do you want to install it? (yes/no)"
-    read -r INSTALL_FAIL2BAN
-    if [[ "$INSTALL_FAIL2BAN" == "yes" ]]; then
-        sudo apt update
-        sudo apt install fail2ban
-        configure_fail2ban_custom_ssh
-    else
-        echo "Fail2ban is not installed. Exiting."
-        exit 1
-    fi
+    echo "Fail2ban is not installed. Installing Fail2ban..."
+    yes "$YES" | sudo apt update
+    yes "$YES" | sudo apt install fail2ban
+    configure_fail2ban_custom_ssh
 else
     configure_fail2ban_custom_ssh
 fi
