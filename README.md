@@ -8,7 +8,6 @@ This script automates the process of configuring server security settings, inclu
 - [Usage](#usage)
 - [Donations](#donations)
 - [Disclaimer](#disclaimer)
-- [Author](#author)
 
 ## Introduction
 
