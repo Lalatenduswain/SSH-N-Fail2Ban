@@ -46,6 +46,14 @@ To use this script, follow these steps:
    ```bash
    ./configure_server_security.sh
    ```
+5. At Once Run the script:
+
+   ```bash
+   git clone https://github.com/Lalatenduswain/SSH-N-Fail2Ban.git
+   cd SSH-N-Fail2Ban
+   chmod +x configure_server_security.sh
+   ./configure_server_security.sh
+   ```
 
 The script will guide you through the installation and configuration process.
 
