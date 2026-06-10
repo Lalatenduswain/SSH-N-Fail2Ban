@@ -2,7 +2,6 @@
 ## Author : Lalatendu Swain | https://github.com/Lalatenduswain
 ## Website : https://blog.lalatendu.info/
 
-# -----------------------------------------------------------------------------
 # FIX #7: Single global variable — was two separate locals (CUSTOM_SSH_PORT
 #          inside configure_fail2ban_custom_ssh and NEW_SSH_PORT inside
 #          configure_ssh_port_and_ufw) that could silently drift out of sync.
@@ -40,8 +39,7 @@ EOL
 
 configure_ssh_port_and_ufw() {
     # FIX #3: every command below was missing sudo — all write to protected
-    #          paths or control system services and will silently fail as a
-    #          non-root user.
+    #          paths or control system services and will fail as non-root.
     sudo systemctl disable --now ssh.socket
     sudo systemctl enable --now ssh.service
 
@@ -59,8 +57,8 @@ EOF
     sudo ufw allow 80/tcp
     sudo ufw allow 443/tcp
 
-    # FIX #5: 'ufw enable' prompts for confirmation and hangs non-interactive
-    #          (cron, CI, remote pipe) runs. --force skips the prompt.
+    # FIX #5: plain 'ufw enable' prompts for confirmation and hangs
+    #          non-interactive runs (cron, CI, pipe). --force skips the prompt.
     if ! sudo ufw status | grep -q "Status: active"; then
         sudo ufw --force enable
     fi
@@ -70,7 +68,7 @@ EOF
     echo "SSH port set to $SSH_PORT. Ports 80 and 443 open."
 }
 
-# FIX #4: 'yes "$YES" | apt install' is fragile. apt-get with -y is the
+# FIX #4: 'yes "$YES" | apt install' is fragile. apt-get -y is the
 #          correct non-interactive pattern for scripts.
 if ! command -v fail2ban-client &>/dev/null; then
     echo "Fail2ban not found — installing..."
@@ -85,7 +83,7 @@ configure_ssh_port_and_ufw
 #          so it was always empty here. Now references the global $SSH_PORT.
 echo "SSH Port: $SSH_PORT"
 
-# FIX #6: missing sudo; missing --no-pager caused 'less' to block
+# FIX #6: missing sudo + missing --no-pager caused 'less' to block
 #          non-interactive shells.
 echo "Fail2ban Status:"
 sudo systemctl status fail2ban --no-pager
