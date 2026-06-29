@@ -1,0 +1,13 @@
+# Editor / OS noise
+*.swp
+*~
+.DS_Store
+*.bak
+*.tmp
+
+# Logs and local test artifacts
+*.log
+random_file_*.txt
+
+# Backups created by sed -i and friends
+*.orig
